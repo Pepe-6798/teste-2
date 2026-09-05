@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Recuperar senha — EasyClass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="device">
+    <div class="brand">
+      <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+      <span class="brand__name">Easy<span>Class</span></span>
+    </div>
+
+    <h1 class="title">Recuperando senha</h1>
+    <p class="subtitle">Informe o telefone do responsável cadastrado. Vamos enviar um link para você criar uma nova senha.</p>
+
+    <form id="form-recuperar" novalidate>
+      <div class="field" id="field-username">
+        <label for="username">Nome do usuário</label>
+        <input type="text" id="username" placeholder="Ex: joana_estuda" autocomplete="username" />
+        <span class="hint">Opcional.</span>
+      </div>
+
+      <div class="field" id="field-phone">
+        <label for="phone">Telefone do responsável</label>
+        <div class="field--phone">
+          <input type="text" class="ddi" value="+55" aria-label="Código do país" />
+          <input type="tel" id="phone" inputmode="numeric" placeholder="(00) 00000-0000" autocomplete="tel" />
+        </div>
+        <span class="error-msg">Informe um telefone válido.</span>
+      </div>
+
+      <button type="submit" class="btn btn--primary">Avançar</button>
+    </form>
+
+    <div class="foot-links">
+      Lembrou a senha? <a class="link" href="entrar.html">Entrar</a>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    document.getElementById("form-recuperar").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const phoneField = document.getElementById("field-phone");
+      const phoneValue = document.getElementById("phone").value;
+      const phoneOk = EasyClass.isValidPhone(phoneValue);
+
+      EasyClass.setFieldError(phoneField, phoneOk ? "" : phoneField.querySelector(".error-msg").textContent);
+      if (!phoneOk) return;
+
+      EasyClass.setSession({ type: "recuperacao" });
+      window.location.href = "sucesso.html";
+    });
+  </script>
+</body>
+</html>
