@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Entrar — EasyClass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="device">
+    <div class="brand">
+      <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+      <span class="brand__name">Easy<span>Class</span></span>
+    </div>
+
+    <h1 class="title">Entrar</h1>
+    <p class="subtitle">Use a data de nascimento e a senha cadastradas para acessar sua conta.</p>
+
+    <form id="form-entrar" novalidate>
+      <div class="field" id="field-birthdate">
+        <label for="birthdate">Data de nascimento</label>
+        <input type="text" id="birthdate" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="bday" />
+        <span class="error-msg">Informe uma data válida no formato DD/MM/AAAA.</span>
+      </div>
+
+      <div class="field" id="field-password">
+        <label for="password">Senha</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+        <span class="error-msg">Informe sua senha.</span>
+      </div>
+
+      <div class="field" id="field-form-error" style="display:none;">
+        <span class="error-msg" style="display:block;">Data de nascimento ou senha incorretas.</span>
+      </div>
+
+      <div class="foot-links" style="margin: 4px 0 20px; text-align: left;">
+        <a class="link" href="recuperar-senha.html">Esqueci minha senha</a>
+      </div>
+
+      <button type="submit" class="btn btn--primary">Entrar</button>
+    </form>
+
+    <div class="foot-links">
+      Ainda não tem conta? <a class="link" href="cadastro-1.html">Cadastre-se</a>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    const birthdateInput = document.getElementById("birthdate");
+    EasyClass.formatDateInput(birthdateInput);
+
+    document.getElementById("form-entrar").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const birthdateField = document.getElementById("field-birthdate");
+      const passwordField = document.getElementById("field-password");
+      const formErrorField = document.getElementById("field-form-error");
+      const password = document.getElementById("password").value;
+
+      formErrorField.style.display = "none";
+
+      const birthdateOk = EasyClass.isValidDate(birthdateInput.value);
+      const passwordOk = password.length > 0;
+
+      EasyClass.setFieldError(birthdateField, birthdateOk ? "" : birthdateField.querySelector(".error-msg").textContent);
+      EasyClass.setFieldError(passwordField, passwordOk ? "" : passwordField.querySelector(".error-msg").textContent);
+
+      if (!birthdateOk || !passwordOk) return;
+
+      const user = EasyClass.findUser({ birthdate: birthdateInput.value });
+      const loginOk = user && user.password === password;
+
+      if (!loginOk) {
+        formErrorField.style.display = "block";
+        return;
+      }
+
+      EasyClass.setSession({ type: "login", username: user.username });
+      window.location.href = "sucesso.html";
+    });
+  </script>
+</body>
+</html>
