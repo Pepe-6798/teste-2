@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- /easyclass/recuperar-senha.html -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
@@ -9,38 +10,54 @@
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="device">
-    <div class="brand">
-      <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
-      <span class="brand__name">Easy<span>Class</span></span>
-    </div>
-
-    <h1 class="title">Recuperando senha</h1>
-    <p class="subtitle">Informe o telefone do responsável cadastrado. Vamos enviar um link para você criar uma nova senha.</p>
-
-    <form id="form-recuperar" novalidate>
-      <div class="field" id="field-username">
-        <label for="username">Nome do usuário</label>
-        <input type="text" id="username" placeholder="Ex: joana_estuda" autocomplete="username" />
-        <span class="hint">Opcional.</span>
+  <div class="auth-shell">
+    <aside class="auth-shell__side">
+      <div class="brand">
+        <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+        <span class="brand__name">Easy<span>Class</span></span>
       </div>
+      <div class="auth-shell__side-copy">
+        <h2>Acontece com todo mundo</h2>
+        <p>Vamos mandar um link para o telefone do responsável para você criar uma nova senha.</p>
+      </div>
+      <div class="auth-shell__side-foot">EasyClass — aulas gratuitas, em qualquer lugar.</div>
+    </aside>
 
-      <div class="field" id="field-phone">
-        <label for="phone">Telefone do responsável</label>
-        <div class="field--phone">
-          <input type="text" class="ddi" value="+55" aria-label="Código do país" />
-          <input type="tel" id="phone" inputmode="numeric" placeholder="(00) 00000-0000" autocomplete="tel" />
+    <main class="auth-shell__main">
+      <div class="auth-shell__form-wrap">
+        <div class="brand">
+          <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+          <span class="brand__name">Easy<span>Class</span></span>
         </div>
-        <span class="error-msg">Informe um telefone válido.</span>
+
+        <h1 class="title">Recuperando senha</h1>
+        <p class="subtitle">Informe o telefone do responsável cadastrado. Vamos enviar um link para você criar uma nova senha.</p>
+
+        <form id="form-recuperar" novalidate>
+          <div class="field" id="field-username">
+            <label for="username">Nome do usuário</label>
+            <input type="text" id="username" placeholder="Ex: joana_estuda" autocomplete="username" />
+            <span class="hint">Opcional.</span>
+          </div>
+
+          <div class="field" id="field-phone">
+            <label for="phone">Telefone do responsável</label>
+            <div class="field--phone">
+              <input type="text" class="ddi" value="+55" aria-label="Código do país" />
+              <input type="tel" id="phone" inputmode="numeric" placeholder="(00) 00000-0000" autocomplete="tel" />
+            </div>
+            <span class="error-msg">Informe um telefone válido.</span>
+          </div>
+
+          <button type="submit" class="btn btn--primary">Avançar</button>
+        </form>
+
+        <div class="foot-links">
+          Lembrou a senha? <a class="link" href="entrar.html">Entrar</a>
+        </div>
       </div>
-
-      <button type="submit" class="btn btn--primary">Avançar</button>
-    </form>
-
-    <div class="foot-links">
-      Lembrou a senha? <a class="link" href="entrar.html">Entrar</a>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script src="app.js"></script>
   <script>
