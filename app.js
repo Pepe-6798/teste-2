@@ -1,13 +1,10 @@
-/* ==========================================================================
-   EasyClass — front-end only flow logic.
-   There is no real back end yet, so "accounts" are kept in localStorage.
-   Swap the functions in the STORAGE section for real API calls later.
-   ========================================================================== */
-
+/* /easyclass/app.js */
 const EasyClass = (() => {
   const USERS_KEY = "easyclass_users";
   const DRAFT_KEY = "easyclass_signup_draft";
   const SESSION_KEY = "easyclass_session";
+  const AULAS_KEY = "easyclass_aulas_realizadas";
+  const MATERIALS_KEY = "easyclass_materiais"; // reserved for future file uploads
 
   function getUsers() {
     try {
@@ -52,6 +49,45 @@ const EasyClass = (() => {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(payload));
   }
 
+  function getSession() {
+    try {
+      return JSON.parse(sessionStorage.getItem(SESSION_KEY)) || null;
+    } catch {
+      return null;
+    }
+  }
+
+  function clearSession() {
+    sessionStorage.removeItem(SESSION_KEY);
+  }
+
+  function getStats() {
+    const users = getUsers();
+    const alunos = users.filter((u) => u.role === "aluno").length;
+    const professores = users.filter((u) => u.role === "professor").length;
+    const aulas = Number(localStorage.getItem(AULAS_KEY)) || 0;
+    return { alunos, professores, aulas };
+  }
+
+  function incrementAulasRealizadas(amount = 1) {
+    const current = Number(localStorage.getItem(AULAS_KEY)) || 0;
+    localStorage.setItem(AULAS_KEY, String(current + amount));
+  }
+
+  function getMaterials() {
+    try {
+      return JSON.parse(localStorage.getItem(MATERIALS_KEY)) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveMaterial(material) {
+    const materials = getMaterials();
+    materials.push(material);
+    localStorage.setItem(MATERIALS_KEY, JSON.stringify(materials));
+  }
+
   function isValidDate(value) {
     if (!/^\d{2}\/\d{2}\/\d{4}$/.test(value)) return false;
     const [d, m, y] = value.split("/").map(Number);
@@ -93,18 +129,14 @@ const EasyClass = (() => {
     });
   }
 
+  function formatNumber(n) {
+    return n.toLocaleString("pt-BR");
+  }
+
   return {
-    getUsers,
-    saveUser,
-    findUser,
-    saveDraft,
-    getDraft,
-    clearDraft,
-    setSession,
-    isValidDate,
-    isValidPhone,
-    isStrongPassword,
-    setFieldError,
-    formatDateInput,
+    getUsers, saveUser, findUser, saveDraft, getDraft, clearDraft,
+    setSession, getSession, clearSession, getStats, incrementAulasRealizadas,
+    getMaterials, saveMaterial, isValidDate, isValidPhone, isStrongPassword,
+    setFieldError, formatDateInput, formatNumber,
   };
 })();
