@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- /easyclass/entrar.html -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
@@ -9,43 +10,59 @@
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="device">
-    <div class="brand">
-      <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
-      <span class="brand__name">Easy<span>Class</span></span>
-    </div>
-
-    <h1 class="title">Entrar</h1>
-    <p class="subtitle">Use a data de nascimento e a senha cadastradas para acessar sua conta.</p>
-
-    <form id="form-entrar" novalidate>
-      <div class="field" id="field-birthdate">
-        <label for="birthdate">Data de nascimento</label>
-        <input type="text" id="birthdate" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="bday" />
-        <span class="error-msg">Informe uma data válida no formato DD/MM/AAAA.</span>
+  <div class="auth-shell">
+    <aside class="auth-shell__side">
+      <div class="brand">
+        <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+        <span class="brand__name">Easy<span>Class</span></span>
       </div>
-
-      <div class="field" id="field-password">
-        <label for="password">Senha</label>
-        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
-        <span class="error-msg">Informe sua senha.</span>
+      <div class="auth-shell__side-copy">
+        <h2>Bom te ver de novo</h2>
+        <p>Entre com a data de nascimento e a senha que você cadastrou.</p>
       </div>
+      <div class="auth-shell__side-foot">EasyClass — aulas gratuitas, em qualquer lugar.</div>
+    </aside>
 
-      <div class="field" id="field-form-error" style="display:none;">
-        <span class="error-msg" style="display:block;">Data de nascimento ou senha incorretas.</span>
+    <main class="auth-shell__main">
+      <div class="auth-shell__form-wrap">
+        <div class="brand">
+          <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+          <span class="brand__name">Easy<span>Class</span></span>
+        </div>
+
+        <h1 class="title">Entrar</h1>
+        <p class="subtitle">Use a data de nascimento e a senha cadastradas para acessar sua conta.</p>
+
+        <form id="form-entrar" novalidate>
+          <div class="field" id="field-birthdate">
+            <label for="birthdate">Data de nascimento</label>
+            <input type="text" id="birthdate" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="bday" />
+            <span class="error-msg">Informe uma data válida no formato DD/MM/AAAA.</span>
+          </div>
+
+          <div class="field" id="field-password">
+            <label for="password">Senha</label>
+            <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+            <span class="error-msg">Informe sua senha.</span>
+          </div>
+
+          <div class="field" id="field-form-error" style="display:none;">
+            <span class="error-msg" style="display:block;">Data de nascimento ou senha incorretas.</span>
+          </div>
+
+          <div class="foot-links" style="margin: 4px 0 20px; text-align: left;">
+            <a class="link" href="recuperar-senha.html">Esqueci minha senha</a>
+          </div>
+
+          <button type="submit" class="btn btn--primary">Entrar</button>
+        </form>
+
+        <div class="foot-links">
+          Ainda não tem conta? <a class="link" href="cadastro-1.html">Cadastre-se</a>
+        </div>
       </div>
-
-      <div class="foot-links" style="margin: 4px 0 20px; text-align: left;">
-        <a class="link" href="recuperar-senha.html">Esqueci minha senha</a>
-      </div>
-
-      <button type="submit" class="btn btn--primary">Entrar</button>
-    </form>
-
-    <div class="foot-links">
-      Ainda não tem conta? <a class="link" href="cadastro-1.html">Cadastre-se</a>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script src="app.js"></script>
   <script>
@@ -78,7 +95,7 @@
         return;
       }
 
-      EasyClass.setSession({ type: "login", username: user.username });
+      EasyClass.setSession({ type: "login", username: user.username, role: user.role });
       window.location.href = "sucesso.html";
     });
   </script>
