@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!-- /easyclass/dashboard.html -->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Minha área — EasyClass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="dash">
+    <nav class="dash__nav">
+      <div class="brand">
+        <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+        <span class="brand__name">Easy<span>Class</span></span>
+      </div>
+      <div class="dash__nav-right">
+        <span class="dash__greeting">Olá, <strong id="greeting-name">—</strong></span>
+        <button class="btn btn--secondary" id="btn-sair" style="width:auto; padding:9px 18px;">Sair</button>
+      </div>
+    </nav>
+
+    <div class="dash__body">
+      <h1 id="dash-title">Minha área</h1>
+      <p id="dash-subtitle">Ainda não há nada por aqui.</p>
+
+      <div class="dash__grid" id="dash-grid">
+        <div class="dash__card">
+          <div class="dash__card-icon">📚</div>
+          <h3>Suas aulas</h3>
+          <p>Quando você agendar ou participar de uma aula, ela vai aparecer aqui.</p>
+        </div>
+        <div class="dash__card">
+          <div class="dash__card-icon">📎</div>
+          <h3>Materiais</h3>
+          <p>Arquivos enviados pelos professores vão aparecer aqui.</p>
+        </div>
+        <div class="dash__card">
+          <div class="dash__card-icon">🏅</div>
+          <h3>Certificados</h3>
+          <p>Certificados de voluntariado ficarão disponíveis para download aqui.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    const session = EasyClass.getSession();
+    if (!session || (session.type !== "cadastro" && session.type !== "login")) {
+      window.location.href = "entrar.html";
+    } else {
+      document.getElementById("greeting-name").textContent = session.username;
+      document.getElementById("dash-subtitle").textContent =
+        session.role === "professor"
+          ? "Assim que você publicar uma aula, ela aparece aqui."
+          : "Assim que você entrar em uma aula, ela aparece aqui.";
+    }
+
+    document.getElementById("btn-sair").addEventListener("click", () => {
+      EasyClass.clearSession();
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
