@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tudo certo — EasyClass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="device">
+    <div class="brand">
+      <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+      <span class="brand__name">Easy<span>Class</span></span>
+    </div>
+
+    <div class="status">
+      <div class="status__icon is-ok">✓</div>
+      <h1 id="status-title">Tudo certo</h1>
+      <p id="status-text">Sua ação foi concluída.</p>
+      <a class="btn btn--primary" id="status-cta" href="index.html">Voltar ao início</a>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    const session = JSON.parse(sessionStorage.getItem("easyclass_session") || "null");
+    const title = document.getElementById("status-title");
+    const text = document.getElementById("status-text");
+
+    if (!session) {
+      window.location.href = "index.html";
+    } else if (session.type === "cadastro") {
+      title.textContent = "Cadastro feito";
+      text.textContent = `Bem-vindo(a), ${session.username}! Sua conta foi criada com sucesso.`;
+    } else if (session.type === "login") {
+      title.textContent = "Login feito";
+      text.textContent = `Bem-vindo(a) de volta, ${session.username}!`;
+    } else if (session.type === "recuperacao") {
+      title.textContent = "Link enviado";
+      text.textContent = "Enviamos um link para o telefone do responsável. Use-o para criar uma nova senha.";
+    }
+  </script>
+</body>
+</html>
