@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- /easyclass/cadastro-1.html -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
@@ -9,48 +10,74 @@
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="device">
-    <div class="brand">
-      <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
-      <span class="brand__name">Easy<span>Class</span></span>
-    </div>
-
-    <div class="steps">
-      <span class="steps__dot is-active"></span>
-      <span class="steps__dot"></span>
-      <span class="steps__label">Passo 1 de 2</span>
-    </div>
-
-    <h1 class="title">Cadastro</h1>
-    <p class="subtitle">Vamos confirmar sua idade e o contato de um responsável antes de continuar.</p>
-
-    <form id="form-cadastro-1" novalidate>
-      <div class="field" id="field-birthdate">
-        <label for="birthdate">Data de nascimento</label>
-        <input type="text" id="birthdate" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="bday" />
-        <span class="error-msg">Informe uma data válida no formato DD/MM/AAAA.</span>
+  <div class="auth-shell">
+    <aside class="auth-shell__side">
+      <div class="brand">
+        <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+        <span class="brand__name">Easy<span>Class</span></span>
       </div>
+      <div class="auth-shell__side-copy">
+        <h2>Comece em dois passos rápidos</h2>
+        <p>Primeiro confirmamos sua idade e o contato de um responsável. Depois é só escolher usuário e senha.</p>
+      </div>
+      <div class="auth-shell__side-foot">EasyClass — aulas gratuitas, em qualquer lugar.</div>
+    </aside>
 
-      <div class="field" id="field-phone">
-        <label for="phone">Telefone do responsável</label>
-        <div class="field--phone">
-          <input type="text" class="ddi" value="+55" aria-label="Código do país" />
-          <input type="tel" id="phone" inputmode="numeric" placeholder="(00) 00000-0000" autocomplete="tel" />
+    <main class="auth-shell__main">
+      <div class="auth-shell__form-wrap">
+        <div class="brand">
+          <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+          <span class="brand__name">Easy<span>Class</span></span>
         </div>
-        <span class="error-msg">Informe um telefone válido.</span>
+
+        <div class="steps">
+          <span class="steps__dot is-active"></span>
+          <span class="steps__dot"></span>
+          <span class="steps__label">Passo 1 de 2</span>
+        </div>
+
+        <h1 class="title">Cadastro</h1>
+        <p class="subtitle">Vamos confirmar sua idade e o contato de um responsável antes de continuar.</p>
+
+        <form id="form-cadastro-1" novalidate>
+          <div class="field role-toggle" id="field-role">
+            <input type="radio" name="role" id="role-aluno" value="aluno" />
+            <label for="role-aluno">Sou aluno</label>
+
+            <input type="radio" name="role" id="role-professor" value="professor" />
+            <label for="role-professor">Sou professor</label>
+
+            <span class="error-msg">Escolha se você é aluno ou professor.</span>
+          </div>
+
+          <div class="field" id="field-birthdate">
+            <label for="birthdate">Data de nascimento</label>
+            <input type="text" id="birthdate" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="bday" />
+            <span class="error-msg">Informe uma data válida no formato DD/MM/AAAA.</span>
+          </div>
+
+          <div class="field" id="field-phone">
+            <label for="phone">Telefone do responsável</label>
+            <div class="field--phone">
+              <input type="text" class="ddi" value="+55" aria-label="Código do país" />
+              <input type="tel" id="phone" inputmode="numeric" placeholder="(00) 00000-0000" autocomplete="tel" />
+            </div>
+            <span class="error-msg">Informe um telefone válido.</span>
+          </div>
+
+          <button type="submit" class="btn btn--primary">Avançar</button>
+        </form>
+
+        <div class="note">
+          Vamos enviar uma notificação para o telefone do responsável. Quando ele clicar no link, sua entrada fica aprovada.
+        </div>
+
+        <div class="foot-links">
+          Já tem uma conta? <a class="link" href="entrar.html">Entrar</a>
+        </div>
       </div>
-
-      <button type="submit" class="btn btn--primary">Avançar</button>
-    </form>
-
-    <div class="note">
-      Vamos enviar uma notificação para o telefone do responsável. Quando ele clicar no link, sua entrada fica aprovada.
-    </div>
-
-    <div class="foot-links">
-      Já tem uma conta? <a class="link" href="entrar.html">Entrar</a>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script src="app.js"></script>
   <script>
@@ -60,19 +87,24 @@
     document.getElementById("form-cadastro-1").addEventListener("submit", (e) => {
       e.preventDefault();
 
+      const roleField = document.getElementById("field-role");
       const birthdateField = document.getElementById("field-birthdate");
       const phoneField = document.getElementById("field-phone");
       const phoneValue = document.getElementById("phone").value;
+      const roleValue = document.querySelector('input[name="role"]:checked');
 
+      const roleOk = Boolean(roleValue);
       const birthdateOk = EasyClass.isValidDate(birthdateInput.value);
       const phoneOk = EasyClass.isValidPhone(phoneValue);
 
+      EasyClass.setFieldError(roleField, roleOk ? "" : roleField.querySelector(".error-msg").textContent);
       EasyClass.setFieldError(birthdateField, birthdateOk ? "" : birthdateField.querySelector(".error-msg").textContent);
       EasyClass.setFieldError(phoneField, phoneOk ? "" : phoneField.querySelector(".error-msg").textContent);
 
-      if (!birthdateOk || !phoneOk) return;
+      if (!roleOk || !birthdateOk || !phoneOk) return;
 
       EasyClass.saveDraft({
+        role: roleValue.value,
         birthdate: birthdateInput.value,
         guardianPhone: phoneValue,
       });
