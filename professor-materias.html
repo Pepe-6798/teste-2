@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!-- /easyclass/professor-materias.html -->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Escolha suas matérias — EasyClass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="auth-shell">
+    <aside class="auth-shell__side">
+      <div class="brand">
+        <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+        <span class="brand__name">Easy<span>Class</span></span>
+      </div>
+      <div class="auth-shell__side-copy">
+        <h2>Professor</h2>
+        <p>Escolha em quais matérias você quer dar aula. Você pode marcar mais de uma.</p>
+      </div>
+      <div class="auth-shell__side-foot">EasyClass — aulas gratuitas, em qualquer lugar.</div>
+    </aside>
+
+    <main class="auth-shell__main">
+      <div class="auth-shell__form-wrap">
+        <div class="brand">
+          <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+          <span class="brand__name">Easy<span>Class</span></span>
+        </div>
+
+        <h1 class="title">Escolha a(s) matéria(s)</h1>
+        <p class="subtitle">Que você quer dar aulas.</p>
+
+        <form id="form-materias" novalidate>
+          <div class="checklist" id="field-materias">
+            <input type="checkbox" name="materia" id="materia-portugues" value="portugues" />
+            <label for="materia-portugues">Português</label>
+
+            <input type="checkbox" name="materia" id="materia-ingles" value="ingles" />
+            <label for="materia-ingles">Inglês</label>
+
+            <input type="checkbox" name="materia" id="materia-matematica" value="matematica" />
+            <label for="materia-matematica">Matemática</label>
+          </div>
+          <div class="field" id="field-materias-error" style="display:none;">
+            <span class="error-msg" style="display:block;">Escolha pelo menos uma matéria.</span>
+          </div>
+
+          <button type="submit" class="btn btn--primary">Avançar</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    const session = EasyClass.getSession();
+    if (!session || session.type !== "cadastro" || session.role !== "professor") {
+      window.location.href = "entrar.html";
+    }
+
+    document.getElementById("form-materias").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const checked = Array.from(document.querySelectorAll('input[name="materia"]:checked')).map((el) => el.value);
+      const errorField = document.getElementById("field-materias-error");
+
+      if (checked.length === 0) {
+        errorField.style.display = "block";
+        return;
+      }
+      errorField.style.display = "none";
+
+      EasyClass.setMateriaQueue(checked);
+      window.location.href = "professor-preparar-quiz.html";
+    });
+  </script>
+</body>
+</html>
