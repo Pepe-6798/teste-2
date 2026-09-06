@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!-- /easyclass/professor-preparar-quiz.html -->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Prepare-se para o quiz — EasyClass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="auth-shell">
+    <aside class="auth-shell__side">
+      <div class="brand">
+        <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+        <span class="brand__name">Easy<span>Class</span></span>
+      </div>
+      <div class="auth-shell__side-copy">
+        <h2 id="side-heading">Quase lá</h2>
+        <p>Esse quiz ajuda a confirmar seu domínio da matéria antes de liberar suas aulas.</p>
+      </div>
+      <div class="auth-shell__side-foot">EasyClass — aulas gratuitas, em qualquer lugar.</div>
+    </aside>
+
+    <main class="auth-shell__main">
+      <div class="auth-shell__form-wrap">
+        <div class="brand">
+          <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+          <span class="brand__name">Easy<span>Class</span></span>
+        </div>
+
+        <h1 class="title" id="prep-title">Tudo certo</h1>
+
+        <div class="prep-card" id="prep-card">
+          Carregando...
+        </div>
+
+        <a class="btn btn--primary" id="btn-avancar" href="professor-quiz.html">Avançar</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="quizzes-data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const session = EasyClass.getSession();
+    if (!session || session.type !== "cadastro" || session.role !== "professor") {
+      window.location.href = "entrar.html";
+    }
+
+    const subject = EasyClass.peekMateria();
+    if (!subject) {
+      window.location.href = "dashboard.html";
+    } else {
+      const label = QUIZ_DATA[subject].label;
+      document.getElementById("side-heading").textContent = label;
+      document.getElementById("prep-card").innerHTML =
+        `Muito bem! Já que você escolheu ser professor em <strong>${label}</strong>, se prepare para um quiz de 20 perguntas para definir em quais categorias (básico, intermediário, avançado) você vai poder dar aula.`;
+
+      EasyClass.startQuizForCurrentMateria();
+    }
+  </script>
+</body>
+</html>
