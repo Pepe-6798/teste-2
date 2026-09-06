@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- /easyclass/professor-quiz.html -->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quiz — EasyClass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="dash">
+    <nav class="dash__nav">
+      <div class="brand">
+        <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+        <span class="brand__name">Easy<span>Class</span></span>
+      </div>
+    </nav>
+
+    <div class="dash__body">
+      <h1 id="quiz-title">Quiz</h1>
+      <p class="quiz-progress" id="quiz-progress"></p>
+
+      <form id="form-quiz" class="quiz-wrap" novalidate>
+        <div id="quiz-questions"></div>
+        <button type="submit" class="btn btn--primary" style="margin-top:12px;">Enviar respostas</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="quizzes-data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const session = EasyClass.getSession();
+    if (!session || session.type !== "cadastro" || session.role !== "professor") {
+      window.location.href = "entrar.html";
+    }
+
+    const subject = EasyClass.peekMateria();
+    if (!subject) {
+      window.location.href = "dashboard.html";
+    }
+
+    const current = EasyClass.getCurrentQuiz();
+    const subjectData = QUIZ_DATA[current.subject];
+    const quiz = subjectData.quizzes[current.quizIndex];
+
+    document.getElementById("quiz-title").textContent = `Quiz de ${subjectData.label}`;
+    document.getElementById("quiz-progress").textContent = `${quiz.questions.length} perguntas — respostas abertas, sem múltipla escolha.`;
+
+    const questionsEl = document.getElementById("quiz-questions");
+    quiz.questions.forEach((question, i) => {
+      const item = document.createElement("div");
+      item.className = "quiz-item";
+      item.innerHTML = `
+        <p class="quiz-item__q"><span>${i + 1}.</span>${question.q}</p>
+        <textarea id="answer-${i}" placeholder="Sua resposta..."></textarea>
+      `;
+      questionsEl.appendChild(item);
+    });
+
+    document.getElementById("form-quiz").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const answers = quiz.questions.map((_, i) => document.getElementById(`answer-${i}`).value.trim());
+      const result = EasyClass.gradeQuiz(current.subject, current.quizIndex, answers);
+      EasyClass.saveMateriaResult(result);
+      EasyClass.popMateriaQueue();
+
+      window.location.href = "professor-quiz-resultado.html";
+    });
+  </script>
+</body>
+</html>
