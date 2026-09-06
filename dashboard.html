@@ -43,9 +43,15 @@
           <p>Certificados de voluntariado ficarão disponíveis para download aqui.</p>
         </div>
       </div>
+
+      <div class="dash__materias" id="dash-materias" style="display:none;">
+        <h2>Suas matérias</h2>
+        <div id="materias-list"></div>
+      </div>
     </div>
   </div>
 
+  <script src="quizzes-data.js"></script>
   <script src="app.js"></script>
   <script>
     const session = EasyClass.getSession();
@@ -57,6 +63,28 @@
         session.role === "professor"
           ? "Assim que você publicar uma aula, ela aparece aqui."
           : "Assim que você entrar em uma aula, ela aparece aqui.";
+
+      if (session.role === "professor") {
+        const user = EasyClass.findUser({ username: session.username });
+        const results = (user && user.materiaResults) || {};
+        const subjects = Object.keys(results);
+
+        if (subjects.length) {
+          document.getElementById("dash-materias").style.display = "block";
+          const listEl = document.getElementById("materias-list");
+          subjects.forEach((subject) => {
+            const result = results[subject];
+            const label = QUIZ_DATA[subject] ? QUIZ_DATA[subject].label : subject;
+            const scoreHtml = result.graded
+              ? `<span class="materia-row__score">${result.score} / ${result.total} acertos</span>`
+              : `<span class="materia-row__score is-pending">Correção pendente</span>`;
+            const row = document.createElement("div");
+            row.className = "materia-row";
+            row.innerHTML = `<span class="materia-row__name">${label}</span>${scoreHtml}`;
+            listEl.appendChild(row);
+          });
+        }
+      }
     }
 
     document.getElementById("btn-sair").addEventListener("click", () => {
