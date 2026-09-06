@@ -1,5 +1,5 @@
-/* /easyclass/style.css */
 /* ==========================================================================
+   /easyclass/style.css
    EasyClass — design tokens + full-screen layout
    Navy → teal identity pulled from the EC mark; a circuit motif nods to the
    "tech-enabled volunteer teaching" idea without turning into a SaaS-card kit.
@@ -271,13 +271,15 @@ img { max-width: 100%; display: block; }
   max-width: 420px;
 }
 
-.auth-shell__form-wrap .brand { display: none; }
+.auth-shell__form-wrap .brand { display: none; } /* shown only when side panel is hidden on mobile */
 
 @media (max-width: 860px) {
   .auth-shell { grid-template-columns: 1fr; }
   .auth-shell__side { display: none; }
   .auth-shell__form-wrap .brand { display: flex; margin-bottom: 26px; }
 }
+
+/* ---------- headings ------------------------------------------------------ */
 
 h1.title {
   font-family: var(--font-display);
@@ -294,6 +296,8 @@ p.subtitle {
   line-height: 1.55;
   margin: 0 0 26px;
 }
+
+/* ---------- step indicator (cadastro is a real 2-step sequence) ---------- */
 
 .steps {
   display: flex;
@@ -320,6 +324,8 @@ p.subtitle {
   color: var(--ink-soft);
   margin-left: 4px;
 }
+
+/* ---------- role toggle (aluno / professor) -------------------------------- */
 
 .role-toggle {
   display: grid;
@@ -351,6 +357,8 @@ p.subtitle {
 }
 
 .role-toggle .error-msg { grid-column: 1 / -1; }
+
+/* ---------- form ----------------------------------------------------------- */
 
 .field { margin-bottom: 18px; }
 
@@ -406,6 +414,8 @@ p.subtitle {
 
 .field--phone .ddi { width: 76px; flex-shrink: 0; text-align: center; }
 
+/* ---------- buttons --------------------------------------------------------- */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -453,6 +463,8 @@ p.subtitle {
 
 .stack { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
 
+/* ---------- links / footnotes ------------------------------------------------ */
+
 .link { color: var(--teal-500); font-weight: 600; text-decoration: none; }
 .link:hover { text-decoration: underline; }
 
@@ -473,6 +485,10 @@ p.subtitle {
   font-size: 13.5px;
   color: var(--ink-soft);
 }
+
+/* ==========================================================================
+   STATUS PAGE (sucesso.html) — full screen
+   ========================================================================== */
 
 .status-page {
   min-height: 100vh;
@@ -520,6 +536,10 @@ p.subtitle {
 }
 
 .status-page .btn { width: auto; padding-left: 32px; padding-right: 32px; }
+
+/* ==========================================================================
+   DASHBOARD (post-login area) — placeholder, ready for future content
+   ========================================================================== */
 
 .dash {
   min-height: 100vh;
@@ -603,3 +623,173 @@ p.subtitle {
   line-height: 1.55;
   margin: 0;
 }
+
+/* This is a placeholder area: when the backend exists, replace .dash__grid's
+   contents with real data (a class list, uploaded files, etc.) fetched on load. */
+
+/* ==========================================================================
+   PROFESSOR ONBOARDING — subject picker, "prepare yourself" screen, the
+   quiz itself, and the result screen. Reuses .auth-shell / .status-page
+   for the surrounding layout; these are the pieces specific to the quiz.
+   ========================================================================== */
+
+.checklist { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+
+.checklist input { position: absolute; opacity: 0; pointer-events: none; }
+
+.checklist label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-field);
+  border: 1.5px solid var(--line);
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.checklist label::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid var(--line);
+  flex-shrink: 0;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.checklist input:checked + label {
+  border-color: var(--teal-500);
+  color: var(--navy-900);
+  background: rgba(47, 184, 166, 0.08);
+}
+
+.checklist input:checked + label::before {
+  background: var(--teal-500);
+  border-color: var(--teal-500);
+}
+
+.prep-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 26px 24px;
+  margin-bottom: 24px;
+  line-height: 1.65;
+  font-size: 14.5px;
+  color: var(--navy-900);
+}
+
+.prep-card strong { color: var(--teal-500); }
+
+/* quiz answer list */
+
+.quiz-wrap { width: 100%; max-width: 720px; margin: 0 auto; }
+
+.quiz-progress {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.quiz-item {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.quiz-item:first-child { padding-top: 0; }
+.quiz-item:last-child { border-bottom: none; }
+
+.quiz-item__q {
+  font-size: 14.5px;
+  color: var(--navy-900);
+  font-weight: 600;
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+
+.quiz-item__q span {
+  display: inline-block;
+  color: var(--teal-500);
+  font-family: var(--font-display);
+  margin-right: 8px;
+}
+
+.quiz-item textarea {
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 14px;
+  border-radius: var(--radius-field);
+  border: 1.5px solid var(--line);
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  color: var(--ink);
+  background: var(--paper);
+  resize: vertical;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.quiz-item textarea:focus {
+  border-color: var(--teal-500);
+  background: var(--card);
+}
+
+/* result screen */
+
+.result-score {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(40px, 6vw, 56px);
+  color: var(--navy-900);
+  margin: 6px 0 4px;
+}
+
+.result-score span {
+  font-size: 0.4em;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.result-pending {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--teal-500);
+  background: rgba(47, 184, 166, 0.12);
+  border-radius: 999px;
+  padding: 6px 14px;
+  margin-bottom: 6px;
+}
+
+/* subjects summary on the dashboard */
+
+.dash__materias {
+  margin-top: 34px;
+}
+
+.dash__materias h2 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--navy-900);
+  margin: 0 0 14px;
+}
+
+.materia-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.materia-row__name { font-weight: 600; color: var(--navy-900); }
+
+.materia-row__score { font-size: 13px; color: var(--ink-soft); }
+
+.materia-row__score.is-pending { color: var(--teal-500); }
