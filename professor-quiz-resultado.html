@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!-- /easyclass/professor-quiz-resultado.html -->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Resultado do quiz — EasyClass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="status-page">
+    <div class="brand">
+      <img class="brand__mark" src="assets/logo.jpeg" alt="Logo EasyClass" />
+      <span class="brand__name">Easy<span>Class</span></span>
+    </div>
+
+    <div class="status__icon is-ok" id="result-icon">✓</div>
+    <h1 id="result-title">Você concluiu o quiz</h1>
+    <div id="result-score-wrap"></div>
+    <p id="result-text"></p>
+    <a class="btn btn--primary" id="result-cta" href="dashboard.html">Continuar</a>
+  </div>
+
+  <script src="quizzes-data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const session = EasyClass.getSession();
+    if (!session || session.type !== "cadastro") {
+      window.location.href = "entrar.html";
+    }
+
+    const results = EasyClass.getMateriaResults();
+    const subjects = Object.keys(results);
+    const last = results[subjects[subjects.length - 1]];
+
+    if (!last) {
+      window.location.href = "dashboard.html";
+    } else {
+      const label = QUIZ_DATA[last.subject].label;
+      document.getElementById("result-title").textContent = `Você concluiu o quiz de ${label}`;
+      document.getElementById("result-score-wrap").innerHTML =
+        `<div class="result-score">${last.score}<span> / ${last.total}</span></div>`;
+      document.getElementById("result-text").textContent =
+        `Você acertou ${last.score} de ${last.total} perguntas.`;
+
+      const nextSubject = EasyClass.peekMateria();
+      const cta = document.getElementById("result-cta");
+
+      if (nextSubject) {
+        // ainda tem outra matéria escolhida pela frente
+        cta.textContent = `Continuar para ${QUIZ_DATA[nextSubject].label}`;
+        cta.href = "professor-preparar-quiz.html";
+      } else {
+        // terminou a última matéria — decide aprovado/reprovado pela média geral
+        // (ver PASSING_RATIO em app.js)
+        const overallRatio = EasyClass.getOverallScoreRatio();
+        const outcome = EasyClass.finalizeProfessorOnboarding(session.username);
+
+        if (outcome.approved) {
+          document.getElementById("result-icon").textContent = "✓";
+          document.getElementById("result-title").textContent = "Você concluiu todos os quizzes";
+          document.getElementById("result-score-wrap").innerHTML =
+            `<div class="result-score">${EasyClass.formatPercent(overallRatio)}</div>`;
+          document.getElementById("result-text").textContent =
+            `Parabéns! Sua média geral foi ${EasyClass.formatPercent(overallRatio)}, acima do mínimo de ${EasyClass.formatPercent(EasyClass.PASSING_RATIO)} exigido. Sua conta foi aprovada como professor(a).`;
+          cta.textContent = "Ir para minha área";
+          cta.href = "dashboard.html";
+        } else {
+          document.getElementById("result-icon").textContent = "!";
+          document.getElementById("result-icon").classList.remove("is-ok");
+          document.getElementById("result-icon").classList.add("is-error");
+          document.getElementById("result-title").textContent = "Você não atingiu a média necessária";
+          document.getElementById("result-score-wrap").innerHTML =
+            `<div class="result-score">${EasyClass.formatPercent(overallRatio)}</div>`;
+          document.getElementById("result-text").textContent =
+            `Sua média geral foi ${EasyClass.formatPercent(overallRatio)}, abaixo do mínimo de ${EasyClass.formatPercent(EasyClass.PASSING_RATIO)} exigido para dar aulas. Por isso, sua conta foi registrada como aluno(a) — você já pode usar a plataforma para receber aulas.`;
+          cta.textContent = "Ir para minha área";
+          cta.href = "dashboard.html";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
